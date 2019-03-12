@@ -21,25 +21,27 @@ class App extends Component {
       }
   }
 
-  componentDidMount() {
-    // console.log("componentDidMount <App />");
-
-    setTimeout(() => {
-      // console.log("Simulating incoming message");
+  addMessage = (content) => {
       // Add a new message to the list of messages in the data store
-      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage)
+    const newMessage = {username: this.state.currentUser.name, content: content};
+    const messages = this.state.messages.concat(newMessage)
       // Update the state of the app component.
       // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages})
-    }, 3000);
-  }
+    this.setState({messages: messages})
+  };
+
+  updateUsername = (username) => {
+    const newUsername = {name: username};
+    this.setState({currentUser: newUsername});
+    
+  };  
+  
 
   render() {
     return (
       <div>
       <MessageList messages={this.state.messages}/>
-      <ChatBar name={this.state.currentUser.name}/>
+      <ChatBar name={this.state.currentUser.name} addMessage={this.addMessage} updateUsername={this.updateUsername}/>
       </div>
     );
   }
