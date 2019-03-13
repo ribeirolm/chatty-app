@@ -8,16 +8,7 @@ class App extends Component {
     super(props);
     this.state = {
         currentUser: {name: 'Bob'}, // optional. if currentUser is not defined, it means the user is Anonymous
-        messages: [
-          {
-            username: 'Bob',
-            content: 'Has anyone seen my marbles?',
-          },
-          {
-            username: 'Anonymous',
-            content: 'No, I think you lost them. You lost your marbles Bob. You lost them for good.'
-          }
-        ]
+        messages: []
       };
   }
   ws = new WebSocket('ws://0.0.0.0:3001');
@@ -27,10 +18,12 @@ class App extends Component {
       console.log('connected to server')
     }
 
-    this.ws.onmessage = evt => {
-      // on receiving a message, add it to the list of messages
-      const message = JSON.parse(evt.data)
-      this.addMessage(message)
+    this.ws.onmessage = dataObject => {
+      // on receiving a message, add it to the list of messages in the App state, thus triggering a re-render
+      let returnedMessage = JSON.parse(dataObject.data);
+      // console.log(message);
+      const messages = this.state.messages.concat(returnedMessage);
+      this.setState({messages: messages});
     }
 
     this.ws.onclose = () => {
@@ -39,12 +32,8 @@ class App extends Component {
   }
 
   addMessage = (content) => {
-      // Add a new message to the list of messages in the data store
+      // Send a new message to the websocket server to add a UUID 
     const newMessage = {username: this.state.currentUser.name, content: content};
-    // const messages = this.state.messages.concat(newMessage)
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-    // this.setState({messages: messages})
     this.ws.send(JSON.stringify(newMessage));
   };
 
