@@ -12,9 +12,6 @@ class MessageList extends Component {
     });
     return <main className="messages">{listMessages}</main>
   }
-
 }
-
-
 
 export default MessageList;

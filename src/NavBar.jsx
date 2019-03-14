@@ -8,11 +8,7 @@ class NavBar extends Component {
              <span className="totalusers">{this.props.totalUsers} users online</span>
             </nav>
         )
-    }
-
-    
+    }  
 }
-
-    
 
 export default NavBar;

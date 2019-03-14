@@ -27,9 +27,7 @@ class App extends Component {
       this.setState({messages: messages});
       } else {
         this.setState({totalUsers: returnedMessage})
-        console.log(this.state.totalUsers);
       }
-      
     }
 
     this.ws.onclose = () => {

@@ -47,7 +47,6 @@ wss.on('connection', (ws) => {
         } else {
             throw new Error('Unknown event type ' + dataObject.type);
         }
-        
     });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
