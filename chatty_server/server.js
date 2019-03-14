@@ -21,20 +21,31 @@ const wss = new SocketServer({ server });
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
     console.log('Client connected');
+    // need to send the number of clients connected --client.send()
     ws.on('message', function incoming(data) {
-        // console.log("data: ", data)
-        let dataObject = JSON.parse(data); 
-        dataObject.id = uuidv4();
-        // console.log(dataObject.id);
-        // console.log(dataObject);
-        // ws.send(JSON.stringify(dataObject));
-        wss.clients.forEach(function each(client) {
-            // console.log("client readystat: ", client.readyState)
-            // console.log("ws open: ", WebSocket.OPEN)
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(JSON.stringify(dataObject));
-            }
-        });
+        let dataObject = JSON.parse(data);
+        if (dataObject.type === 'postMessage'){
+            dataObject.id = uuidv4();
+            dataObject.type = 'incomingMessage';
+            wss.clients.forEach(function each(client) {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify(dataObject));
+                }
+            });
+        } else if(dataObject.type ===           'postNotification'){ 
+            dataObject.type = 'incomingNotification';
+            wss.clients.forEach(function each(client) {
+                // console.log("client readystat: ", client.readyState)
+                // console.log("ws open: ", WebSocket.OPEN)
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify(dataObject));
+                }
+            });
+
+        } else {
+            throw new Error('Unknown event type ' + dataObject.type);
+        }
+        
     });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
-// import Message from './Message.jsx';
+import Message from './Message.jsx';
 import MessageList from './MessageList.jsx';
 
 class App extends Component {
@@ -18,10 +18,9 @@ class App extends Component {
       console.log('connected to server')
     }
 
-    this.ws.onmessage = dataObject => {
-      // on receiving a message, add it to the list of messages in the App state, thus triggering a re-render
-      let returnedMessage = JSON.parse(dataObject.data);
-      // console.log(message);
+    this.ws.onmessage = data => {
+      const returnedMessage = JSON.parse(data.data);
+          // on receiving a message, add it to the list of messages in the App state, thus triggering a re-render
       const messages = this.state.messages.concat(returnedMessage);
       this.setState({messages: messages});
     }
@@ -32,17 +31,20 @@ class App extends Component {
   }
 
   addMessage = (content) => {
-      // Send a new message to the websocket server to add a UUID 
-    const newMessage = {username: this.state.currentUser.name, content: content};
+    // Send a new message to the websocket server to add a UUID and broadcast to every client
+    const newMessage = {type: 'postMessage', username: this.state.currentUser.name, content: content};
     this.ws.send(JSON.stringify(newMessage));
   };
 
   updateUsername = (username) => {
+    // Send a new message to the websocket server to add a type and broadcast to every client
     const newUsername = {name: username};
+    const userNameNotification = {type: 'postNotification', content: `${this.state.currentUser.name} has changed their name to ${username}`}
+    this.ws.send(JSON.stringify(userNameNotification));
+    // Update the currentUser state
     this.setState({currentUser: newUsername});
     
   };  
-  
 
   render() {
     return (
