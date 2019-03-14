@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
-import Message from './Message.jsx';
+import NavBar from './NavBar.jsx';
 import MessageList from './MessageList.jsx';
 
 class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-        currentUser: {name: 'Bob'}, // optional. if currentUser is not defined, it means the user is Anonymous
-        messages: []
+        currentUser: {name: 'Bob'},
+        messages: [],
+        totalUsers: 0,
       };
   }
   ws = new WebSocket('ws://0.0.0.0:3001');
@@ -21,8 +22,14 @@ class App extends Component {
     this.ws.onmessage = data => {
       const returnedMessage = JSON.parse(data.data);
           // on receiving a message, add it to the list of messages in the App state, thus triggering a re-render
+      if(returnedMessage.type === 'incomingNotification' || returnedMessage.type === 'incomingMessage'){
       const messages = this.state.messages.concat(returnedMessage);
       this.setState({messages: messages});
+      } else {
+        this.setState({totalUsers: returnedMessage})
+        console.log(this.state.totalUsers);
+      }
+      
     }
 
     this.ws.onclose = () => {
@@ -49,9 +56,13 @@ class App extends Component {
   render() {
     return (
       <div>
-      <MessageList messages={this.state.messages}/>
-      <ChatBar name={this.state.currentUser.name} addMessage={this.addMessage} updateUsername={this.updateUsername}/>
+        <NavBar totalUsers={this.state.totalUsers}/>
+        <div>
+          <MessageList messages={this.state.messages}/>
+          <ChatBar name={this.state.currentUser.name} addMessage={this.addMessage} updateUsername={this.updateUsername}/>
+        </div>
       </div>
+      
     );
   }
 }

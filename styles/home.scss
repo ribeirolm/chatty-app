@@ -10,6 +10,15 @@ body {
   margin: 70px 0;
 }
 
+.totalusers {
+  display: block;
+  float: right;
+  font-weight: 500;
+  font-size: 20px;
+  height: 60px;
+  line-height: 60px;
+  padding: 0 10px;
+}
 .chatbar {
   background: tomato;
   border-top: 1px solid black;
