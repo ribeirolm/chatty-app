@@ -7,12 +7,12 @@ Chatty App is a full stack web application that allows users to communicate with
 
 Users can chat with multiple people.
 
-!["Screenshot of Homepage with multi-user chat"] (https://github.com/ribeirolm/chatty-app/blob/master/docs/multi-user-chat.png?raw=true)
+!["Screenshot of Homepage with multi-user chat"](https://github.com/ribeirolm/chatty-app/blob/master/docs/multi-user-chat.png?raw=true)
 
 
 Upon changing username, a notification message is sent to all users.
 
-!["Screenshot of Homepage with multi-user chat"] (https://github.com/ribeirolm/chatty-app/blob/master/docs/username-change.png?raw=true)
+!["Screenshot of Homepage with multi-user chat"](https://github.com/ribeirolm/chatty-app/blob/master/docs/username-change.png?raw=true)
 
 
 ### Getting Started
